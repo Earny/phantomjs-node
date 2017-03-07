@@ -7,6 +7,7 @@ import path from 'path';
 import split from 'split';
 import winston from 'winston';
 import EventEmitter from 'events';
+import util from 'util';
 import Page from './page';
 import Command from './command';
 import OutObject from './out_object';
@@ -346,7 +347,11 @@ export default class Phantom {
         clearInterval(this.heartBeatId);
         for (const command of this.commands.values()) {
             if (command.deferred != null) {
-                command.deferred.reject(new Error(errmsg));
+                command.deferred.reject(new Error(
+                    errmsg + ' @ ' +
+                    command.target + '.' +
+                    command.name + '(' + util.inspect(command.params, { depth: null }) + ')')
+                );
             }
         }
     }
