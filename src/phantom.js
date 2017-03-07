@@ -7,6 +7,7 @@ import path from 'path';
 import split from 'split';
 import winston from 'winston';
 import EventEmitter from 'events';
+import util from 'util';
 import Page from './page';
 import Command from './command';
 import OutObject from './out_object';
@@ -355,7 +356,11 @@ export default class Phantom {
     this.commands.forEach((command) => {
       const { params: [name] } = command;
       if (name !== 'exit' && command.deferred) {
-        command.deferred.reject(new Error(msg));
+        command.deferred.reject(new Error(
+          msg + ' @ ' +
+          command.target + '.' +
+          command.name + '(' + util.inspect(command.params, { depth: null }) + ')'
+        ));
       }
     });
   }
