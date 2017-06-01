@@ -350,7 +350,7 @@ export default class Phantom {
                 command.deferred.reject(new Error(
                     errmsg + ' @ ' +
                     command.target + '.' +
-                    command.name + '(' + util.inspect(command.params, { depth: null }) + ')')
+                    command.name + '(' + util.inspect(command.params, { depth: null }).substr(0, 255) + ')')
                 );
             }
         }
